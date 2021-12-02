@@ -4,15 +4,20 @@ pub mod fileio {
     use std::path::Path;
 
     pub fn read_file(filename: String) -> Vec<String> {
-        let mut vec = Vec::new();
-        if let Ok(lines) = read_lines(filename) {
-            for line in lines {
-                if let Ok(num) = line {
-                    vec.push(num);
-                }
-            }
-        }
-        vec
+        // let mut vec = Vec::new();
+        // if let Ok(lines) = read_lines(filename) {
+        //     for line in lines {
+        //         if let Ok(num) = line {
+        //             vec.push(num);
+        //         }
+        //     }
+        // }
+        // vec
+        // read_lines(filename).unwrap().collect()
+        read_lines(filename)
+            .unwrap()
+            .map(|l| l.expect("Could not parse line"))
+            .collect()
     }
 
     pub fn read_file_int(filename: String) -> Vec<i32> {
