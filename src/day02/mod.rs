@@ -34,8 +34,6 @@ pub fn part_two(readings: &Vec<String>) -> Result<i32, Error> {
         },
     );
     Ok(position.0 * position.1)
-
-    // Ok(i32::abs(forward * depth))
 }
 
 #[cfg(test)]
