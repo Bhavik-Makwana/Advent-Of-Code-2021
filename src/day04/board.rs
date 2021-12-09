@@ -67,4 +67,12 @@ impl Board {
 
         Board { board: ret_board }
     }
+
+    pub fn score(&self) -> i32 {
+        self.board
+            .iter()
+            .flatten()
+            .filter(|x| **x != -1)
+            .sum::<i32>()
+    }
 }

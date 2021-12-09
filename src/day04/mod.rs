@@ -33,14 +33,7 @@ pub fn part_one(bingo_input: &Vec<Vec<String>>) -> Result<i32, Error> {
                 .filter(|board| board.check_win())
                 .collect::<Vec<&Board>>()[0];
 
-            println!("{:?}", winning_board);
-            return Ok(winning_board
-                .board
-                .iter()
-                .flatten()
-                .filter(|x| **x != -1)
-                .sum::<i32>()
-                * number);
+            return Ok(winning_board.score() * number);
         }
     }
     Err(Error)
@@ -51,16 +44,19 @@ pub fn part_two(bingo_input: &Vec<Vec<String>>) -> Result<i32, Error> {
         .split(",")
         .map(|x| x.parse().unwrap())
         .collect();
+
     let mut bingo_boards: Vec<Board> = bingo_input
         .into_iter()
         .skip(1)
         .map(|board| store_board(board))
         .collect();
+
     for (i, number) in rollcall.iter().enumerate() {
         bingo_boards = bingo_boards
             .iter()
             .map(|board| board.mark_board(number))
             .collect::<Vec<Board>>();
+
         if bingo_boards
             .iter()
             .filter(|board| !board.check_win())
@@ -72,15 +68,11 @@ pub fn part_two(bingo_input: &Vec<Vec<String>>) -> Result<i32, Error> {
                 .iter()
                 .filter(|board| !board.check_win())
                 .collect::<Vec<&Board>>()[0];
+
             for j in i..rollcall.len() - 1 {
                 let losing_board = &losing_board.mark_board(&rollcall[j + 1]);
                 if losing_board.check_win() {
-                    let t = losing_board
-                        .board
-                        .iter()
-                        .flatten()
-                        .filter(|x| **x != -1)
-                        .sum::<i32>();
+                    let t = losing_board.score();
                     return Ok(t * &rollcall[i + 1]);
                 }
             }
