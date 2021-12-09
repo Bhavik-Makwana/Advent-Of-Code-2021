@@ -29,72 +29,63 @@ pub fn part_two(times: &Vec<String>) -> Result<i32, Error> {
 
         for number in lhs.split(" ") {
             match number.len() {
-                2 => println!("is 1"),
-                3 => println!("is 7"),
-                4 => println!("is 4"),
-                7 => println!("is 8"),
                 5 => {
-                    let mut total = 0;
-                    let mut total2 = 0;
-                    for i in number.chars() {
-                        if matched[1].contains(i) {
-                            total2 += 1;
-                        }
-                        if matched[4].contains(i) {
-                            total += 1;
-                        }
-                    }
-                    if total == 3 {
-                        if total2 == 1 {
-                            println!("5");
+                    let matches_with_one = number
+                        .chars()
+                        .filter(|i| matched[1].contains(*i))
+                        .collect::<String>()
+                        .len();
+                    let matches_with_four = number
+                        .chars()
+                        .filter(|i| matched[4].contains(*i))
+                        .collect::<String>()
+                        .len();
+
+                    if matches_with_four == 3 {
+                        // 5 takes 3 from 4
+                        if matches_with_one == 1 {
+                            // 5 take 1 from 1
                             matched[5] = number.to_string();
-                        } else if total2 == 2 {
-                            println!("3");
+                        } else if matches_with_one == 2 {
+                            // 3 take 2 from 1
                             matched[3] = number.to_string();
                         }
-                    } else if total == 2 {
-                        println!("2");
+                    } else if matches_with_four == 2 {
+                        // 2 takes 2 from 4
                         matched[2] = number.to_string();
                     }
-                    // 5 takes 3 from 4
-                    // 2 takes 2 from 4
-
-                    // 5 take 1 from 1
-                    // 3 take 2 from 1
                 }
                 6 => {
-                    let mut total = 0;
-                    let mut total2 = 0;
-                    for i in number.chars() {
-                        if matched[7].contains(i) {
-                            total += 1;
-                        }
-                        if matched[4].contains(i) {
-                            total2 += 1;
-                        }
-                    }
+                    let matches_with_seven = number
+                        .chars()
+                        .filter(|i| matched[7].contains(*i))
+                        .collect::<String>()
+                        .len();
+                    let matches_with_four = number
+                        .chars()
+                        .filter(|i| matched[4].contains(*i))
+                        .collect::<String>()
+                        .len();
 
-                    if total == 3 {
-                        if total2 == 4 {
-                            println!("9");
+                    if matches_with_seven == 3 {
+                        // 9 takes 3 from 7
+                        if matches_with_four == 4 {
+                            // 9 takes 4 from 4
                             matched[9] = number.to_string();
                         } else {
-                            println!("0");
+                            // 0 takes 3 from 4
                             matched[0] = number.to_string();
                         }
-                    } else if total == 2 {
-                        println!("6");
+                    } else if matches_with_seven == 2 {
+                        // 6 takes 2 from 7
                         matched[6] = number.to_string();
                     }
-                    // 9 takes 3 from 7
-                    // 6 takes 2 from 7
                 }
                 _ => println!("malformed"),
             }
         }
         let mut out = "".to_string();
         for num in rhs.split(" ") {
-            println!("{} {}", num, matched[5]);
             let x = sort_str(&num.to_string());
             match x {
                 _ if x == sort_str(&matched[1]) => out += "1",
@@ -110,7 +101,6 @@ pub fn part_two(times: &Vec<String>) -> Result<i32, Error> {
                 _ => (),
             }
         }
-        println!("output {}", out);
         total += out.parse::<i32>().unwrap();
     }
     Ok(total)
@@ -124,25 +114,25 @@ fn sort_str(s: &String) -> String {
 mod tests {
 
     #[test]
-    // fn part_one_sample() {
-    //     let vec = crate::readfile::fileio::read_file(String::from("input/test/day08.txt"));
-    //     assert_eq!(crate::day08::part_one(&vec), Ok(26));
-    // }
+    fn part_one_sample() {
+        let vec = crate::readfile::fileio::read_file(String::from("input/test/day08.txt"));
+        assert_eq!(crate::day08::part_one(&vec), Ok(26));
+    }
 
-    // #[test]
-    // fn part_one_actual() {
-    //     let vec = crate::readfile::fileio::read_file(String::from("input/day08.txt"));
-    //     assert_eq!(crate::day08::part_one(&vec), Ok(344));
-    // }
+    #[test]
+    fn part_one_actual() {
+        let vec = crate::readfile::fileio::read_file(String::from("input/day08.txt"));
+        assert_eq!(crate::day08::part_one(&vec), Ok(344));
+    }
     #[test]
     fn part_two_sample() {
         let vec = crate::readfile::fileio::read_file(String::from("input/test/day08.txt"));
         assert_eq!(crate::day08::part_two(&vec), Ok(61229));
     }
 
-    // #[test]
-    // fn part_two_actual() {
-    //     let vec = crate::readfile::fileio::read_list(String::from("input/day08.txt"));
-    //     assert_eq!(crate::day08::part_two(&vec), Ok(97038163));
-    // }
+    #[test]
+    fn part_two_actual() {
+        let vec = crate::readfile::fileio::read_file(String::from("input/day08.txt"));
+        assert_eq!(crate::day08::part_two(&vec), Ok(1048410));
+    }
 }
